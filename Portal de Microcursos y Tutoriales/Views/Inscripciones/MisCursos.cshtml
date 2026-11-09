@@ -32,7 +32,7 @@ else
                     <td>@inscripcion.Curso?.Nivel</td>
                     <td>@inscripcion.FechaInscripcion.ToString("dd/MM/yyyy")</td>
                     <td>
-                        <a asp-controller="Cursos" asp-action="Detalle" asp-route-id="@inscripcion.CursoId">Ver curso</a>
+                        <a asp-controller="Lecciones" asp-action="Curso" asp-route-cursoId="@inscripcion.CursoId">Ver lecciones</a>
                     </td>
                 </tr>
             }

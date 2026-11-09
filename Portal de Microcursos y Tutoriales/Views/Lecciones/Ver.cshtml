@@ -1,0 +1,34 @@
+@model Leccion
+
+@{
+    ViewData["Title"] = Model.Titulo;
+    var lecciones = (List<Leccion>)ViewData["Lecciones"]!;
+}
+
+<h1>@Model.Titulo</h1>
+
+<p><strong>Curso:</strong> @Model.Curso?.Titulo</p>
+
+<div class="row">
+    <div class="col-md-4">
+        <h5>Lecciones del curso</h5>
+        <ul>
+            @foreach (var item in lecciones)
+            {
+                <li>
+                    @if (item.Id == Model.Id)
+                    {
+                        <strong>@item.Titulo</strong>
+                    }
+                    else
+                    {
+                        <a asp-action="Ver" asp-route-id="@item.Id">@item.Titulo</a>
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+    <div class="col-md-8">
+        @Html.Raw(Model.Contenido)
+    </div>
+</div>

@@ -17,6 +17,9 @@
 {
     <p>Ya estás inscrito en este curso.</p>
     <p>
+        <a asp-controller="Lecciones" asp-action="Curso" asp-route-cursoId="@Model.Id">Ver lecciones</a>
+    </p>
+    <p>
         <a asp-controller="Inscripciones" asp-action="MisCursos">Ir a mis cursos</a>
     </p>
 }
