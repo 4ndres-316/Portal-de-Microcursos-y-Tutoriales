@@ -1,0 +1,41 @@
+@model IEnumerable<Inscripcion>
+
+@{
+    ViewData["Title"] = "Mis cursos";
+}
+
+<h1>Mis cursos</h1>
+
+@if (!Model.Any())
+{
+    <p>No estás inscrito en ningún curso.</p>
+    <p>
+        <a asp-controller="Cursos" asp-action="Index">Ver catálogo de cursos</a>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Curso</th>
+                <th>Nivel</th>
+                <th>Fecha de inscripción</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var inscripcion in Model)
+            {
+                <tr>
+                    <td>@inscripcion.Curso?.Titulo</td>
+                    <td>@inscripcion.Curso?.Nivel</td>
+                    <td>@inscripcion.FechaInscripcion.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        <a asp-controller="Cursos" asp-action="Detalle" asp-route-id="@inscripcion.CursoId">Ver curso</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
