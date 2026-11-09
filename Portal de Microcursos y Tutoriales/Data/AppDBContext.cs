@@ -1,11 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Portal_de_Microcursos_y_Tutoriales.Models;
 
 namespace Portal_de_Microcursos_y_Tutoriales.Data
 {
-    public class AppDBContext : DbContext
+    public class AppDBContext : IdentityDbContext<IdentityUser>
     {
-        public AppDBContext(DbContextOptions<AppDBContext> options) 
+        public AppDBContext(DbContextOptions<AppDBContext> options)
             : base(options) { }
 
         public DbSet<Curso> Cursos { get; set; }

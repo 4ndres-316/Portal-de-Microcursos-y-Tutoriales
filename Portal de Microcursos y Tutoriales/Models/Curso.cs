@@ -6,9 +6,9 @@ namespace Portal_de_Microcursos_y_Tutoriales.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "El nombre es obligatorio")]
-        [Display(Name = "Nombre")]
-        public string Nombre { get; set; }
+        [Required(ErrorMessage = "El título es obligatorio")]
+        [Display(Name = "Título")]
+        public string Titulo { get; set; }
 
         [Required(ErrorMessage = "La descripción es obligatoria")]
         [StringLength(200, ErrorMessage = "La descripción no puede tener más de 200 caracteres")]
