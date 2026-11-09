@@ -53,4 +53,18 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 
+// Datos iniciales (roles, usuario administrador y cursos de ejemplo)
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        await DbInitializer.InicializarAsync(scope.ServiceProvider);
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("Inicio");
+        logger.LogError(ex, "No se pudo inicializar la base de datos");
+    }
+}
+
 app.Run();
