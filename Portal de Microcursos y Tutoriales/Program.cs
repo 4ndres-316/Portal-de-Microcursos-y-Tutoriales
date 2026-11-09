@@ -62,8 +62,7 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("Inicio");
-        logger.LogError(ex, "No se pudo inicializar la base de datos");
+        Console.WriteLine("No se pudo inicializar la base de datos: " + ex.Message);
     }
 }
 
