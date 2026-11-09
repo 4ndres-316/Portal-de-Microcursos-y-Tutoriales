@@ -23,10 +23,16 @@
         <a asp-controller="Inscripciones" asp-action="MisCursos">Ir a mis cursos</a>
     </p>
 }
-else
+else if (User.Identity?.IsAuthenticated == true)
 {
     <form asp-controller="Inscripciones" asp-action="Inscribir" method="post">
         <input type="hidden" name="cursoId" value="@Model.Id" />
         <button type="submit" class="btn btn-primary">Inscribirme</button>
     </form>
+}
+else
+{
+    <p>
+        <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Detalle", "Cursos", new { id = Model.Id })">Inicia sesión para inscribirte</a>
+    </p>
 }
