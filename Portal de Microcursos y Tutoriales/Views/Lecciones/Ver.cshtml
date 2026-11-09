@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = Model.Titulo;
     var lecciones = (List<Leccion>)ViewData["Lecciones"]!;
+    var completadas = (List<int>)ViewData["Completadas"]!;
 }
 
 <h1>@Model.Titulo</h1>
@@ -16,6 +17,7 @@
             @foreach (var item in lecciones)
             {
                 <li>
+                    @(completadas.Contains(item.Id) ? "✔" : "○")
                     @if (item.Id == Model.Id)
                     {
                         <strong>@item.Titulo</strong>
@@ -30,5 +32,19 @@
     </div>
     <div class="col-md-8">
         @Html.Raw(Model.Contenido)
+
+        <hr />
+
+        @if (completadas.Contains(Model.Id))
+        {
+            <p><strong>Lección completada.</strong></p>
+        }
+        else
+        {
+            <form asp-action="MarcarCompletada" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn btn-success">Marcar como completada</button>
+            </form>
+        }
     </div>
 </div>

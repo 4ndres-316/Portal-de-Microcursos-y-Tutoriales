@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Portal_de_Microcursos_y_Tutoriales.Data;
+using Portal_de_Microcursos_y_Tutoriales.Models;
 
 namespace Portal_de_Microcursos_y_Tutoriales.Controllers
 {
@@ -62,9 +63,56 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
                 .OrderBy(l => l.Orden)
                 .ToListAsync();
 
+            var completadas = await _context.LeccionesCompletadas
+                .Where(lc => lc.InscripcionId == inscripcion.Id)
+                .Select(lc => lc.LeccionId)
+                .ToListAsync();
+
             ViewData["Lecciones"] = lecciones;
+            ViewData["Completadas"] = completadas;
 
             return View(leccion);
+        }
+
+        // Marca la leccion como completada
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarcarCompletada(int id)
+        {
+            var leccion = await _context.Lecciones
+                .FirstOrDefaultAsync(l => l.Id == id);
+
+            if (leccion == null)
+            {
+                return NotFound();
+            }
+
+            var usuarioId = _userManager.GetUserId(User);
+
+            var inscripcion = await _context.Inscripciones
+                .FirstOrDefaultAsync(i => i.CursoId == leccion.CursoId && i.UsuarioId == usuarioId);
+
+            if (inscripcion == null)
+            {
+                return Forbid();
+            }
+
+            var yaCompletada = await _context.LeccionesCompletadas
+                .AnyAsync(lc => lc.InscripcionId == inscripcion.Id && lc.LeccionId == id);
+
+            if (!yaCompletada)
+            {
+                _context.LeccionesCompletadas.Add(new LeccionCompletada
+                {
+                    InscripcionId = inscripcion.Id,
+                    LeccionId = id,
+                    FechaCompletado = DateTime.Now
+                });
+
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Ver), new { id });
         }
     }
 }

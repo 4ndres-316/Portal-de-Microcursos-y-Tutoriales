@@ -1,4 +1,4 @@
-@model IEnumerable<Inscripcion>
+@model IEnumerable<MisCursosItem>
 
 @{
     ViewData["Title"] = "Mis cursos";
@@ -20,19 +20,21 @@ else
             <tr>
                 <th>Curso</th>
                 <th>Nivel</th>
+                <th>Progreso</th>
                 <th>Fecha de inscripción</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var inscripcion in Model)
+            @foreach (var item in Model)
             {
                 <tr>
-                    <td>@inscripcion.Curso?.Titulo</td>
-                    <td>@inscripcion.Curso?.Nivel</td>
-                    <td>@inscripcion.FechaInscripcion.ToString("dd/MM/yyyy")</td>
+                    <td>@item.Curso.Titulo</td>
+                    <td>@item.Curso.Nivel</td>
+                    <td>@item.Completadas de @item.TotalLecciones (@item.Porcentaje%)</td>
+                    <td>@item.FechaInscripcion.ToString("dd/MM/yyyy")</td>
                     <td>
-                        <a asp-controller="Lecciones" asp-action="Curso" asp-route-cursoId="@inscripcion.CursoId">Ver lecciones</a>
+                        <a asp-controller="Lecciones" asp-action="Curso" asp-route-cursoId="@item.Curso.Id">Ver lecciones</a>
                     </td>
                 </tr>
             }
