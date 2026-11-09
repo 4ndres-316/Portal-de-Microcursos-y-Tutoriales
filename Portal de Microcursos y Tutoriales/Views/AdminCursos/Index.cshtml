@@ -1,0 +1,52 @@
+@model IEnumerable<Curso>
+
+@{
+    ViewData["Title"] = "Administrar cursos";
+}
+
+<h1>Administrar cursos</h1>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<p>
+    <a asp-action="Crear">Nuevo curso</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Nivel</th>
+            <th>Lecciones</th>
+            <th>Inscritos</th>
+            <th>Estado</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var curso in Model)
+        {
+            <tr>
+                <td>@curso.Titulo</td>
+                <td>@curso.Nivel</td>
+                <td>@curso.Lecciones.Count</td>
+                <td>@curso.Inscripciones.Count</td>
+                <td>@(curso.Publicado ? "Publicado" : "No publicado")</td>
+                <td>
+                    <a asp-action="Editar" asp-route-id="@curso.Id">Editar</a> |
+                    <a asp-controller="AdminLecciones" asp-action="Index" asp-route-cursoId="@curso.Id">Lecciones</a> |
+                    <a asp-action="Inscritos" asp-route-id="@curso.Id">Inscritos</a> |
+                    <form asp-action="Publicar" asp-route-id="@curso.Id" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-link p-0">@(curso.Publicado ? "Despublicar" : "Publicar")</button>
+                    </form> |
+                    <form asp-action="Eliminar" asp-route-id="@curso.Id" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-link p-0 text-danger">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

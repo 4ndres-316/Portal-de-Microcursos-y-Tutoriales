@@ -1,0 +1,45 @@
+@model IEnumerable<Leccion>
+
+@{
+    ViewData["Title"] = "Lecciones";
+    var curso = (Curso)ViewData["Curso"]!;
+}
+
+<h1>Lecciones de @curso.Titulo</h1>
+
+<p>
+    <a asp-action="Crear" asp-route-cursoId="@curso.Id">Nueva lección</a> |
+    <a asp-controller="AdminCursos" asp-action="Index">Volver a cursos</a>
+</p>
+
+@if (!Model.Any())
+{
+    <p>Este curso todavía no tiene lecciones.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Orden</th>
+                <th>Título</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var leccion in Model)
+            {
+                <tr>
+                    <td>@leccion.Orden</td>
+                    <td>@leccion.Titulo</td>
+                    <td>
+                        <a asp-action="Editar" asp-route-id="@leccion.Id">Editar</a> |
+                        <form asp-action="Eliminar" asp-route-id="@leccion.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-link p-0 text-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

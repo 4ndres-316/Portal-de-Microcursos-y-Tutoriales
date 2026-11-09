@@ -1,0 +1,36 @@
+@model Curso
+
+@{
+    ViewData["Title"] = "Inscritos";
+}
+
+<h1>Inscritos en @Model.Titulo</h1>
+
+<p>
+    <a asp-action="Index">Volver a cursos</a>
+</p>
+
+@if (!Model.Inscripciones.Any())
+{
+    <p>Este curso todavía no tiene inscritos.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Suscriptor</th>
+                <th>Fecha de inscripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var inscripcion in Model.Inscripciones)
+            {
+                <tr>
+                    <td>@inscripcion.Usuario?.Email</td>
+                    <td>@inscripcion.FechaInscripcion.ToString("dd/MM/yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
