@@ -5,7 +5,7 @@ using Portal_de_Microcursos_y_Tutoriales.Models;
 
 namespace Portal_de_Microcursos_y_Tutoriales.Data
 {
-    public class AppDBContext : IdentityDbContext<IdentityUser>
+    public class AppDBContext : IdentityDbContext<ApplicationUser>
     {
         public AppDBContext(DbContextOptions<AppDBContext> options)
             : base(options) { }

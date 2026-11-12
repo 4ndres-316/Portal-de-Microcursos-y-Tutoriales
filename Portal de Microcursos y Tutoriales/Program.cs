@@ -14,7 +14,7 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 
 // Identity
 builder.Services
-    .AddDefaultIdentity<IdentityUser>(options =>
+    .AddDefaultIdentity<ApplicationUser>(options =>
     {
         options.SignIn.RequireConfirmedAccount = false;
         options.Password.RequiredLength = 8;
@@ -53,17 +53,11 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 
-// Datos iniciales (roles, usuario administrador y cursos de ejemplo)
 using (var scope = app.Services.CreateScope())
 {
-    try
-    {
-        await DbInitializer.InicializarAsync(scope.ServiceProvider);
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine("No se pudo inicializar la base de datos: " + ex.Message);
-    }
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    if (!await roleManager.RoleExistsAsync("Suscriptor"))
+        await roleManager.CreateAsync(new IdentityRole("Suscriptor"));
 }
 
 app.Run();

@@ -11,9 +11,9 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
     public class InscripcionesController : Controller
     {
         private readonly AppDBContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public InscripcionesController(AppDBContext context, UserManager<IdentityUser> userManager)
+        public InscripcionesController(AppDBContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;

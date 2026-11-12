@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Identity;
+using Portal_de_Microcursos_y_Tutoriales.Data;
 
 namespace Portal_de_Microcursos_y_Tutoriales.Models
 {
@@ -21,7 +21,7 @@ namespace Portal_de_Microcursos_y_Tutoriales.Models
 
         //Relacion
         [ForeignKey("UsuarioId")]
-        public IdentityUser? Usuario { get; set; }
+        public ApplicationUser? Usuario { get; set; }
 
         [ForeignKey("CursoId")]
         public Curso? Curso { get; set; }

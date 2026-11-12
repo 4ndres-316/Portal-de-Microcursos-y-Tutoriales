@@ -255,7 +255,7 @@ namespace Portal_de_Microcursos_y_Tutoriales.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cursos");
+                    b.ToTable("Cursos", (string)null);
                 });
 
             modelBuilder.Entity("Portal_de_Microcursos_y_Tutoriales.Models.Inscripcion", b =>
@@ -283,7 +283,7 @@ namespace Portal_de_Microcursos_y_Tutoriales.Migrations
                     b.HasIndex("UsuarioId", "CursoId")
                         .IsUnique();
 
-                    b.ToTable("Inscripciones");
+                    b.ToTable("Inscripciones", (string)null);
                 });
 
             modelBuilder.Entity("Portal_de_Microcursos_y_Tutoriales.Models.Leccion", b =>
@@ -313,7 +313,7 @@ namespace Portal_de_Microcursos_y_Tutoriales.Migrations
 
                     b.HasIndex("CursoId");
 
-                    b.ToTable("Lecciones");
+                    b.ToTable("Lecciones", (string)null);
                 });
 
             modelBuilder.Entity("Portal_de_Microcursos_y_Tutoriales.Models.LeccionCompletada", b =>
@@ -340,7 +340,7 @@ namespace Portal_de_Microcursos_y_Tutoriales.Migrations
                     b.HasIndex("InscripcionId", "LeccionId")
                         .IsUnique();
 
-                    b.ToTable("LeccionesCompletadas");
+                    b.ToTable("LeccionesCompletadas", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

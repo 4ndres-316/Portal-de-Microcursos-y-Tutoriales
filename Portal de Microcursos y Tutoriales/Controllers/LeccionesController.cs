@@ -11,9 +11,9 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
     public class LeccionesController : Controller
     {
         private readonly AppDBContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public LeccionesController(AppDBContext context, UserManager<IdentityUser> userManager)
+        public LeccionesController(AppDBContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
