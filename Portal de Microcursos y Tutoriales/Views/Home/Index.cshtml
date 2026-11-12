@@ -2,10 +2,36 @@
     ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Portal de Microcursos y Tutoriales</h1>
-    <p>Bienvenido al portal de microcursos de Univalle.</p>
-    <p>
-        <a class="btn btn-primary" asp-controller="Cursos" asp-action="Index">Ver catálogo de cursos</a>
-    </p>
+<div class="upv-hero">
+    <img src="~/images/logo-univalle.png" alt="Univalle"
+         style="height:80px; filter:brightness(0) invert(1); margin-bottom:1rem;" />
+    <h1>Portal de Microcursos y Tutoriales</h1>
+    <p class="mb-4">Aprende a tu ritmo con los recursos educativos de la Universidad Privada del Valle.</p>
+    <a class="btn btn-light btn-lg px-4" asp-controller="Cursos" asp-action="Index">
+        Ver catálogo de cursos
+    </a>
+</div>
+
+<div class="row g-4 text-center">
+    <div class="col-md-4">
+        <div class="card h-100 p-4">
+            <div class="mb-3" style="font-size:2.5rem; color:var(--upv-guinda);">📚</div>
+            <h5 class="fw-bold">Cursos cortos</h5>
+            <p class="text-muted">Contenido enfocado y práctico diseñado para que domines un tema específico rápidamente.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 p-4">
+            <div class="mb-3" style="font-size:2.5rem; color:var(--upv-guinda);">🎯</div>
+            <h5 class="fw-bold">A tu ritmo</h5>
+            <p class="text-muted">Accede cuando quieras y avanza lección por lección sin presión de horarios.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 p-4">
+            <div class="mb-3" style="font-size:2.5rem; color:var(--upv-guinda);">✅</div>
+            <h5 class="fw-bold">Seguimiento de progreso</h5>
+            <p class="text-muted">Marca lecciones como completadas y lleva el control de tu avance en cada curso.</p>
+        </div>
+    </div>
 </div>
