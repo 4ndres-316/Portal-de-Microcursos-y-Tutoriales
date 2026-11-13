@@ -96,6 +96,24 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
         }
 
         [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public async Task<IActionResult> GuardarOrden([FromBody] List<OrdenLeccionDto> orden)
+        {
+            if (orden == null || !orden.Any())
+                return BadRequest();
+
+            foreach (var item in orden)
+            {
+                var leccion = await _context.Lecciones.FindAsync(item.Id);
+                if (leccion != null)
+                    leccion.Orden = item.Orden;
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Eliminar(int id)
         {
@@ -113,5 +131,11 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
 
             return RedirectToAction(nameof(Index), new { cursoId });
         }
+    }
+
+    public class OrdenLeccionDto
+    {
+        public int Id { get; set; }
+        public int Orden { get; set; }
     }
 }

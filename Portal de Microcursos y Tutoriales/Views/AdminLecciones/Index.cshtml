@@ -5,41 +5,166 @@
     var curso = (Curso)ViewData["Curso"]!;
 }
 
-<h1>Lecciones de @curso.Titulo</h1>
-
-<p>
-    <a asp-action="Crear" asp-route-cursoId="@curso.Id">Nueva lección</a> |
-    <a asp-controller="AdminCursos" asp-action="Index">Volver a cursos</a>
-</p>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    @Html.AntiForgeryToken()
+    <h1 class="section-title mb-0">Lecciones de @curso.Titulo</h1>
+    <div class="d-flex gap-2">
+        <a asp-action="Crear" asp-route-cursoId="@curso.Id" class="btn btn-primary btn-sm">
+            + Nueva lección
+        </a>
+        <a asp-controller="AdminCursos" asp-action="Index" class="btn btn-outline-secondary btn-sm">
+            ← Volver a cursos
+        </a>
+    </div>
+</div>
 
 @if (!Model.Any())
 {
-    <p>Este curso todavía no tiene lecciones.</p>
+    <div class="alert alert-info">
+        Este curso todavía no tiene lecciones. Crea la primera usando el botón de arriba.
+    </div>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Orden</th>
-                <th>Título</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var leccion in Model)
-            {
-                <tr>
-                    <td>@leccion.Orden</td>
-                    <td>@leccion.Titulo</td>
-                    <td>
-                        <a asp-action="Editar" asp-route-id="@leccion.Id">Editar</a> |
-                        <form asp-action="Eliminar" asp-route-id="@leccion.Id" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-link p-0 text-danger">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header-upv d-flex justify-content-between align-items-center">
+                    <span>🗂 Área de organización — arrastra las lecciones para reordenarlas</span>
+                    <span class="badge bg-light text-dark" id="estadoBadge">Sin cambios</span>
+                </div>
+                <div class="card-body p-3">
+                    <div id="areaDiseno"
+                         style="min-height: 200px; background: #fdf5f8; border: 2px dashed #c8a0b4;
+                                border-radius: .5rem; padding: 1rem; display: flex;
+                                flex-wrap: wrap; gap: .75rem; align-content: flex-start;">
+                        @foreach (var leccion in Model)
+                        {
+                            <div class="tarjeta-leccion"
+                                 data-id="@leccion.Id"
+                                 style="background: #fff; border: 2px solid #9B1748; border-radius: .5rem;
+                                        padding: .75rem 1rem; cursor: grab; user-select: none;
+                                        min-width: 200px; max-width: 280px; box-shadow: 0 2px 6px rgba(155,23,72,.15);
+                                        transition: box-shadow .2s;">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <div class="badge-orden mb-1"
+                                             style="background: #9B1748; color: #fff; border-radius: 999px;
+                                                    font-size:.75rem; padding:.2em .7em; display:inline-block;">
+                                            #<span class="num-orden">@leccion.Orden</span>
+                                        </div>
+                                        <div class="fw-semibold" style="font-size:.95rem;">@leccion.Titulo</div>
+                                    </div>
+                                    <div class="d-flex flex-column gap-1 ms-2">
+                                        <a asp-action="Editar" asp-route-id="@leccion.Id"
+                                           class="btn btn-outline-secondary btn-sm py-0 px-2"
+                                           title="Editar" style="font-size:.75rem;">✏</a>
+                                        <form asp-action="Eliminar" asp-route-id="@leccion.Id" method="post">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm py-0 px-2"
+                                                    title="Eliminar" style="font-size:.75rem;"
+                                                    onclick="return confirm('¿Eliminar esta lección?')">🗑</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                    <small class="text-muted">
+                        💡 Arrastra las tarjetas para reorganizar el orden de las lecciones.
+                    </small>
+                    <button id="btnGuardar" class="btn btn-primary" disabled>
+                        💾 Guardar orden
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="alertaGuardado" class="alert alert-success d-none">
+        ✅ Orden guardado correctamente.
+    </div>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+    <script>
+        const area = document.getElementById('areaDiseno');
+        const btnGuardar = document.getElementById('btnGuardar');
+        const estadoBadge = document.getElementById('estadoBadge');
+        const alertaGuardado = document.getElementById('alertaGuardado');
+
+        if (area) {
+            Sortable.create(area, {
+                animation: 150,
+                ghostClass: 'tarjeta-ghost',
+                chosenClass: 'tarjeta-elegida',
+                onEnd: function () {
+                    actualizarNumerosOrden();
+                    btnGuardar.disabled = false;
+                    estadoBadge.textContent = 'Cambios pendientes';
+                    estadoBadge.className = 'badge bg-warning text-dark';
+                    alertaGuardado.classList.add('d-none');
+                }
+            });
+        }
+
+        function actualizarNumerosOrden() {
+            const tarjetas = area.querySelectorAll('.tarjeta-leccion');
+            tarjetas.forEach((t, i) => {
+                t.querySelector('.num-orden').textContent = i + 1;
+            });
+        }
+
+        btnGuardar && btnGuardar.addEventListener('click', async function () {
+            const tarjetas = area.querySelectorAll('.tarjeta-leccion');
+            const payload = Array.from(tarjetas).map((t, i) => ({
+                id: parseInt(t.dataset.id),
+                orden: i + 1
+            }));
+
+            btnGuardar.disabled = true;
+            btnGuardar.textContent = 'Guardando...';
+
+            try {
+                const resp = await fetch('@Url.Action("GuardarOrden", "AdminLecciones")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value ?? ''
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (resp.ok) {
+                    estadoBadge.textContent = 'Guardado ✓';
+                    estadoBadge.className = 'badge bg-success';
+                    alertaGuardado.classList.remove('d-none');
+                    btnGuardar.textContent = '💾 Guardar orden';
+                } else {
+                    throw new Error('Error del servidor');
+                }
+            } catch {
+                btnGuardar.disabled = false;
+                btnGuardar.textContent = '💾 Guardar orden';
+                estadoBadge.textContent = 'Error al guardar';
+                estadoBadge.className = 'badge bg-danger';
             }
-        </tbody>
-    </table>
+        });
+    </script>
+
+    <style>
+        .tarjeta-ghost {
+            opacity: .4;
+            border-style: dashed !important;
+        }
+        .tarjeta-elegida {
+            box-shadow: 0 6px 20px rgba(155,23,72,.35) !important;
+            cursor: grabbing !important;
+        }
+        .tarjeta-leccion:hover {
+            box-shadow: 0 4px 14px rgba(155,23,72,.25) !important;
+        }
+    </style>
 }
