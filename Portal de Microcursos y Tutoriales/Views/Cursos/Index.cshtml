@@ -4,37 +4,41 @@
     ViewData["Title"] = "Catálogo de cursos";
 }
 
-<h1>Catálogo de cursos</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="section-title mb-0">Catálogo de cursos</h1>
+    <span class="text-muted">@Model.Count() curso(s) disponible(s)</span>
+</div>
 
 @if (!Model.Any())
 {
-    <p>Todavía no hay cursos publicados.</p>
+    <div class="alert alert-info">Todavía no hay cursos publicados.</div>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Descripción</th>
-                <th>Nivel</th>
-                <th>Duración</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var curso in Model)
-            {
-                <tr>
-                    <td>@curso.Titulo</td>
-                    <td>@curso.Descripcion</td>
-                    <td>@curso.Nivel</td>
-                    <td>@curso.DuracionHoras horas</td>
-                    <td>
-                        <a asp-action="Detalle" asp-route-id="@curso.Id">Ver curso</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="row g-4">
+        @foreach (var curso in Model)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-header-upv">
+                        <span class="badge bg-light text-dark float-end">@curso.Nivel</span>
+                        @curso.Titulo
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <p class="text-muted flex-grow-1" style="font-size:.9rem;">
+                            @(curso.Descripcion.Length > 120 ? curso.Descripcion[..120] + "…" : curso.Descripcion)
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mt-2" style="font-size:.85rem; color:#666;">
+                            <span>⏱ @curso.DuracionHoras hora(s)</span>
+                            <span>📖 @curso.Lecciones.Count lección(es)</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                        <a asp-action="Detalle" asp-route-id="@curso.Id"
+                           class="btn btn-primary btn-sm w-100">Ver curso</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 }

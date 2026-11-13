@@ -4,47 +4,92 @@
     ViewData["Title"] = Model.Titulo;
     var lecciones = (List<Leccion>)ViewData["Lecciones"]!;
     var completadas = (List<int>)ViewData["Completadas"]!;
+    var total = lecciones.Count;
+    var pct = total > 0 ? (int)Math.Round((double)completadas.Count / total * 100) : 0;
+    var indiceActual = lecciones.FindIndex(l => l.Id == Model.Id);
+    var anterior = indiceActual > 0 ? lecciones[indiceActual - 1] : null;
+    var siguiente = indiceActual < lecciones.Count - 1 ? lecciones[indiceActual + 1] : null;
 }
 
-<h1>@Model.Titulo</h1>
+<div class="row g-4">
 
-<p><strong>Curso:</strong> @Model.Curso?.Titulo</p>
-
-<div class="row">
-    <div class="col-md-4">
-        <h5>Lecciones del curso</h5>
-        <ul>
-            @foreach (var item in lecciones)
-            {
-                <li>
-                    @(completadas.Contains(item.Id) ? "✔" : "○")
-                    @if (item.Id == Model.Id)
-                    {
-                        <strong>@item.Titulo</strong>
-                    }
-                    else
-                    {
-                        <a asp-action="Ver" asp-route-id="@item.Id">@item.Titulo</a>
-                    }
-                </li>
-            }
-        </ul>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header-upv">
+                📖 @Model.Curso?.Titulo
+            </div>
+            <div class="px-3 py-2" style="font-size:.8rem; color:#555;">
+                <div class="d-flex justify-content-between mb-1">
+                    <span>Progreso</span><span>@pct%</span>
+                </div>
+                <div class="progress mb-2" style="height:6px; border-radius:999px;">
+                    <div class="progress-bar" style="width:@pct%"></div>
+                </div>
+            </div>
+            <ul class="list-group list-group-flush">
+                @foreach (var item in lecciones)
+                {
+                    var esActual = item.Id == Model.Id;
+                    var hecha = completadas.Contains(item.Id);
+                    <li class="list-group-item px-3 py-2 @(esActual ? "fw-bold" : "")"
+                        style="font-size:.85rem; @(esActual ? "background:#fdf5f8; border-left:3px solid #9B1748;" : "")">
+                        <span class="me-2">@(hecha ? "✅" : "○")</span>
+                        @if (esActual)
+                        {
+                            @item.Titulo
+                        }
+                        else
+                        {
+                            <a asp-action="Ver" asp-route-id="@item.Id"
+                               style="text-decoration:none; color:inherit;">@item.Titulo</a>
+                        }
+                    </li>
+                }
+            </ul>
+            <div class="card-footer bg-transparent">
+                <a asp-controller="Inscripciones" asp-action="MisCursos"
+                   class="btn btn-outline-secondary btn-sm w-100">← Mis cursos</a>
+            </div>
+        </div>
     </div>
-    <div class="col-md-8">
-        @Html.Raw(Model.Contenido)
 
-        <hr />
+    <div class="col-md-9">
+        <h2 class="section-title">@Model.Titulo</h2>
 
-        @if (completadas.Contains(Model.Id))
-        {
-            <p><strong>Lección completada.</strong></p>
-        }
-        else
-        {
-            <form asp-action="MarcarCompletada" method="post">
-                <input type="hidden" name="id" value="@Model.Id" />
-                <button type="submit" class="btn btn-success">Marcar como completada</button>
-            </form>
-        }
+        <div class="leccion-contenido mb-4">
+            @Html.Raw(Model.Contenido)
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-3">
+            <div>
+                @if (anterior != null)
+                {
+                    <a asp-action="Ver" asp-route-id="@anterior.Id"
+                       class="btn btn-outline-secondary btn-sm">← @anterior.Titulo</a>
+                }
+            </div>
+
+            <div class="d-flex gap-2">
+                @if (completadas.Contains(Model.Id))
+                {
+                    <span class="btn btn-outline-success btn-sm disabled">✅ Completada</span>
+                }
+                else
+                {
+                    <form asp-action="MarcarCompletada" method="post" class="d-inline">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <button type="submit" class="btn btn-primary btn-sm">Marcar como completada</button>
+                    </form>
+                }
+            </div>
+
+            <div>
+                @if (siguiente != null)
+                {
+                    <a asp-action="Ver" asp-route-id="@siguiente.Id"
+                       class="btn btn-outline-secondary btn-sm">@siguiente.Titulo →</a>
+                }
+            </div>
+        </div>
     </div>
 </div>

@@ -35,17 +35,25 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
 
         public IActionResult Crear(int cursoId)
         {
-            return View(new Leccion { CursoId = cursoId, Orden = 1 });
+            return View(new Leccion { CursoId = cursoId });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Crear(Leccion leccion)
         {
+            ModelState.Remove("Orden");
+
             if (!ModelState.IsValid)
             {
                 return View(leccion);
             }
+
+            var maxOrden = await _context.Lecciones
+                .Where(l => l.CursoId == leccion.CursoId)
+                .MaxAsync(l => (int?)l.Orden) ?? 0;
+
+            leccion.Orden = maxOrden + 1;
 
             _context.Lecciones.Add(leccion);
             await _context.SaveChangesAsync();

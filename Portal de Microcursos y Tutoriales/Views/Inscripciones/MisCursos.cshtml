@@ -4,40 +4,68 @@
     ViewData["Title"] = "Mis cursos";
 }
 
-<h1>Mis cursos</h1>
+<h1 class="section-title mb-4">Mis cursos</h1>
 
 @if (!Model.Any())
 {
-    <p>No estás inscrito en ningún curso.</p>
-    <p>
-        <a asp-controller="Cursos" asp-action="Index">Ver catálogo de cursos</a>
-    </p>
+    <div class="card p-5 text-center">
+        <div style="font-size:3rem; color:#9B1748;">📚</div>
+        <h4 class="mt-3">Aún no estás inscrito en ningún curso</h4>
+        <p class="text-muted">Explora el catálogo y empieza a aprender hoy.</p>
+        <a asp-controller="Cursos" asp-action="Index" class="btn btn-primary mx-auto" style="width:fit-content;">
+            Ver catálogo de cursos
+        </a>
+    </div>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Curso</th>
-                <th>Nivel</th>
-                <th>Progreso</th>
-                <th>Fecha de inscripción</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Curso.Titulo</td>
-                    <td>@item.Curso.Nivel</td>
-                    <td>@item.Completadas de @item.TotalLecciones (@item.Porcentaje%)</td>
-                    <td>@item.FechaInscripcion.ToString("dd/MM/yyyy")</td>
-                    <td>
-                        <a asp-controller="Lecciones" asp-action="Curso" asp-route-cursoId="@item.Curso.Id">Ver lecciones</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            var pct = item.Porcentaje;
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-header-upv">
+                        <span class="badge bg-light text-dark float-end">@item.Curso.Nivel</span>
+                        @item.Curso.Titulo
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <p class="text-muted mb-3" style="font-size:.85rem;">
+                            Inscrito el @item.FechaInscripcion.ToString("dd/MM/yyyy")
+                        </p>
+
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between mb-1" style="font-size:.82rem; color:#555;">
+                                <span>Progreso</span>
+                                <span>@item.Completadas / @item.TotalLecciones lecciones (@pct%)</span>
+                            </div>
+                            <div class="progress" style="height:8px; border-radius:999px;">
+                                <div class="progress-bar" role="progressbar"
+                                     style="width:@pct%;" aria-valuenow="@pct"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                        @if (item.TotalLecciones == 0)
+                        {
+                            <span class="btn btn-outline-secondary btn-sm w-100 disabled">Sin lecciones aún</span>
+                        }
+                        else if (pct == 100)
+                        {
+                            <a asp-controller="Lecciones" asp-action="Curso" asp-route-cursoId="@item.Curso.Id"
+                               class="btn btn-outline-primary btn-sm w-100">✅ Completado — Repasar</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Lecciones" asp-action="Curso" asp-route-cursoId="@item.Curso.Id"
+                               class="btn btn-primary btn-sm w-100">
+                                @(item.Completadas == 0 ? "Comenzar" : "Continuar")
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 }

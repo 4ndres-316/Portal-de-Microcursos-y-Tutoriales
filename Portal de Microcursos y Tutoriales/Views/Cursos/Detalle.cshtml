@@ -5,34 +5,63 @@
     var inscrito = (bool)(ViewData["Inscrito"] ?? false);
 }
 
-<h1>@Model.Titulo</h1>
+<div class="mb-3">
+    <a asp-controller="Cursos" asp-action="Index" class="btn btn-outline-secondary btn-sm">← Volver al catálogo</a>
+</div>
 
-<p>@Model.Descripcion</p>
+<div class="row g-4">
+    <div class="col-md-8">
+        <h1 class="section-title">@Model.Titulo</h1>
+        <p class="text-muted">@Model.Descripcion</p>
 
-<p><strong>Nivel:</strong> @Model.Nivel</p>
-<p><strong>Duración:</strong> @Model.DuracionHoras horas</p>
-<p><strong>Lecciones:</strong> @Model.Lecciones.Count</p>
+        <div class="d-flex flex-wrap gap-3 my-3">
+            <span class="badge-nivel">@Model.Nivel</span>
+            <span style="color:#666; font-size:.9rem;">⏱ @Model.DuracionHoras hora(s)</span>
+            <span style="color:#666; font-size:.9rem;">📖 @Model.Lecciones.Count lección(es)</span>
+        </div>
 
-@if (inscrito)
-{
-    <p>Ya estás inscrito en este curso.</p>
-    <p>
-        <a asp-controller="Lecciones" asp-action="Curso" asp-route-cursoId="@Model.Id">Ver lecciones</a>
-    </p>
-    <p>
-        <a asp-controller="Inscripciones" asp-action="MisCursos">Ir a mis cursos</a>
-    </p>
-}
-else if (User.Identity?.IsAuthenticated == true)
-{
-    <form asp-controller="Inscripciones" asp-action="Inscribir" method="post">
-        <input type="hidden" name="cursoId" value="@Model.Id" />
-        <button type="submit" class="btn btn-primary">Inscribirme</button>
-    </form>
-}
-else
-{
-    <p>
-        <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Detalle", "Cursos", new { id = Model.Id })">Inicia sesión para inscribirte</a>
-    </p>
-}
+        @if (inscrito)
+        {
+            <div class="alert alert-success">Ya estás inscrito en este curso.</div>
+            <div class="d-flex gap-2">
+                <a asp-controller="Lecciones" asp-action="Curso" asp-route-cursoId="@Model.Id"
+                   class="btn btn-primary">Ir a las lecciones</a>
+                <a asp-controller="Inscripciones" asp-action="MisCursos"
+                   class="btn btn-outline-secondary">Ver mis cursos</a>
+            </div>
+        }
+        else if (User.Identity?.IsAuthenticated == true)
+        {
+            <form asp-controller="Inscripciones" asp-action="Inscribir" method="post">
+                <input type="hidden" name="cursoId" value="@Model.Id" />
+                <button type="submit" class="btn btn-primary btn-lg">Inscribirme</button>
+            </form>
+        }
+        else
+        {
+            <a class="btn btn-primary"
+               asp-area="Identity" asp-page="/Account/Login"
+               asp-route-returnUrl="@Url.Action("Detalle", "Cursos", new { id = Model.Id })">
+                Inicia sesión para inscribirte
+            </a>
+        }
+    </div>
+
+    @if (Model.Lecciones.Any())
+    {
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header-upv">Contenido del curso</div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var (leccion, i) in Model.Lecciones.OrderBy(l => l.Orden).Select((l, i) => (l, i)))
+                    {
+                        <li class="list-group-item d-flex align-items-center gap-2" style="font-size:.9rem;">
+                            <span style="color:#9B1748; font-weight:700; min-width:1.5rem;">@(i + 1).</span>
+                            @leccion.Titulo
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+</div>
