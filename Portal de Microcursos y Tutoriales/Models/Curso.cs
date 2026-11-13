@@ -29,7 +29,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Models
         public bool Publicado { get; set; }
 
 
-        //Relacion
         public ICollection<Leccion> Lecciones { get; set; } = new List<Leccion>();
         public ICollection<Inscripcion> Inscripciones { get; set; } = new List<Inscripcion>();
     }

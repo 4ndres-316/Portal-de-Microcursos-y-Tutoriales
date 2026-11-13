@@ -19,7 +19,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Data
         {
             base.OnModelCreating(builder);
 
-            // Un usuario solo se puede inscribir una vez en el mismo curso
             builder.Entity<Inscripcion>()
                 .HasIndex(i => new { i.UsuarioId, i.CursoId })
                 .IsUnique();
@@ -42,7 +41,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Data
                 .HasForeignKey(l => l.CursoId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Una leccion solo se marca como completada una vez
             builder.Entity<LeccionCompletada>()
                 .HasIndex(lc => new { lc.InscripcionId, lc.LeccionId })
                 .IsUnique();

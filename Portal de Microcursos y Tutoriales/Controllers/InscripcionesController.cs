@@ -19,7 +19,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
             _userManager = userManager;
         }
 
-        // Cursos en los que el usuario esta inscrito y su progreso
         public async Task<IActionResult> MisCursos()
         {
             var usuarioId = _userManager.GetUserId(User);
@@ -57,7 +56,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
             return View(lista);
         }
 
-        // Inscripcion a un curso gratuito
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Inscribir(int cursoId)
@@ -87,7 +85,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            // Al inscribirse el usuario pasa a ser suscriptor
             var usuario = await _userManager.GetUserAsync(User);
             if (usuario != null && !await _userManager.IsInRoleAsync(usuario, "Suscriptor"))
             {

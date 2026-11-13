@@ -24,7 +24,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Models
         public int Orden { get; set; }
 
 
-        //Relacion
         [ForeignKey("CursoId")]
         public Curso? Curso { get; set; }
 

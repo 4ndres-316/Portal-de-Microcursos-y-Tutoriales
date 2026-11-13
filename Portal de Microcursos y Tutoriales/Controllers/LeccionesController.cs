@@ -19,7 +19,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
             _userManager = userManager;
         }
 
-        // Lleva a la primera leccion del curso
         public async Task<IActionResult> Curso(int cursoId)
         {
             var leccion = await _context.Lecciones
@@ -35,7 +34,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
             return RedirectToAction(nameof(Ver), new { id = leccion.Id });
         }
 
-        // Contenido de la leccion. Solo para usuarios inscritos en el curso.
         public async Task<IActionResult> Ver(int id)
         {
             var leccion = await _context.Lecciones
@@ -49,7 +47,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
 
             var usuarioId = _userManager.GetUserId(User);
 
-            // Aunque el usuario escriba la URL, se verifica la inscripcion aqui
             var inscripcion = await _context.Inscripciones
                 .FirstOrDefaultAsync(i => i.CursoId == leccion.CursoId && i.UsuarioId == usuarioId);
 
@@ -74,7 +71,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
             return View(leccion);
         }
 
-        // Marca la leccion como completada
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> MarcarCompletada(int id)

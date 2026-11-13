@@ -16,7 +16,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
             _context = context;
         }
 
-        // Lista de todos los cursos, publicados o no
         public async Task<IActionResult> Index()
         {
             var cursos = await _context.Cursos
@@ -105,7 +104,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
                 return NotFound();
             }
 
-            // Un curso con inscripciones no se puede borrar
             if (curso.Inscripciones.Any())
             {
                 TempData["Error"] = "No se puede eliminar el curso porque tiene suscriptores inscritos.";
@@ -118,7 +116,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Publicar o despublicar
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Publicar(int id)
@@ -136,7 +133,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Suscriptores inscritos en el curso
         public async Task<IActionResult> Inscritos(int id)
         {
             var curso = await _context.Cursos

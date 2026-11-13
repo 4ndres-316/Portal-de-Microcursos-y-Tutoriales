@@ -16,7 +16,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
             _context = context;
         }
 
-        // Lecciones del curso, ordenadas
         public async Task<IActionResult> Index(int cursoId)
         {
             var curso = await _context.Cursos

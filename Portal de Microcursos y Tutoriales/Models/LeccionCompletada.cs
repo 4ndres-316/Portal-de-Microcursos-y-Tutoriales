@@ -17,7 +17,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Models
         public DateTime FechaCompletado { get; set; } = DateTime.Now;
 
 
-        //Relacion
         [ForeignKey("InscripcionId")]
         public Inscripcion? Inscripcion { get; set; }
 

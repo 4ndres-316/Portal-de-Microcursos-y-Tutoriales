@@ -16,7 +16,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
             _userManager = userManager;
         }
 
-        // Catalogo de cursos publicados (lo puede ver cualquiera)
         public async Task<IActionResult> Index()
         {
             var cursos = await _context.Cursos
@@ -28,7 +27,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Controllers
             return View(cursos);
         }
 
-        // Pagina de presentacion del curso
         public async Task<IActionResult> Detalle(int id)
         {
             var curso = await _context.Cursos

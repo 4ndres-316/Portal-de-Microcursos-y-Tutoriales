@@ -19,7 +19,6 @@ namespace Portal_de_Microcursos_y_Tutoriales.Models
         public DateTime FechaInscripcion { get; set; } = DateTime.Now;
 
 
-        //Relacion
         [ForeignKey("UsuarioId")]
         public ApplicationUser? Usuario { get; set; }
 
