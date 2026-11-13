@@ -22,11 +22,11 @@
             </div>
             <div class="mb-3">
                 <label asp-for="Orden" class="form-label"></label>
-                <input asp-for="Orden" class="form-control" />
+                <input asp-for="Orden" class="form-control" type="number" min="1" />
                 <span asp-validation-for="Orden" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-primary">Guardar</button>
-            <a asp-action="Index" asp-route-cursoId="@Model.CursoId">Cancelar</a>
+            <a asp-action="Index" asp-route-cursoId="@Model.CursoId" class="btn btn-outline-secondary ms-2">Cancelar</a>
         </form>
     </div>
 </div>

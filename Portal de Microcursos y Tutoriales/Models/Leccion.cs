@@ -19,6 +19,7 @@ namespace Portal_de_Microcursos_y_Tutoriales.Models
         [Display(Name = "Contenido")]
         public string Contenido { get; set; } = "";
 
+        [Range(1, int.MaxValue, ErrorMessage = "El orden debe ser mayor a 0")]
         [Display(Name = "Orden")]
         public int Orden { get; set; }
 
